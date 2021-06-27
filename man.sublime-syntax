@@ -36,7 +36,10 @@ contexts:
     # Comments begin and finish at the end of the line
     - match: \\["#]
       scope: comment.man
-      push: line_comment
+      push:
+        - meta_scope: comment.line.man
+        - match: $
+          pop: true
 
 
   macros:
@@ -62,12 +65,6 @@ contexts:
       scope: keyword.control.man
       push:
         - meta_content_scope: markup.italic.man
-
-
-  line_comment:
-    - meta_scope: comment.line.man
-    - match: $
-      pop: true
 
 
   string:
