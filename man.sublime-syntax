@@ -17,8 +17,7 @@ variables:
 
 contexts:
   main:
-    - match: '{{cc}}{{macro}}'
-      scope: keyword.control.man
+    - match: (?={{cc}})
       push: macros
 
     - match: '{{cc}}(?={{font_style}})\b'
@@ -43,12 +42,27 @@ contexts:
 
 
   macros:
+    - match: '{{cc}}{{macro}}'
+      scope: keyword.control.man
+      push: macros_line
+      pop: true
+
+    - match: '{{cc}}\w+\b'
+      scope: support.function.groff
+      push: macros_line
+      pop: true
+
+
+  macros_line:
     - match: '"'
       scope: punctuation.definition.string.begin.man
       push: string
 
     - match: '{{numeric}}'
       scope: constant.numeric.man
+
+    - match: \w
+      scope: variable.parameter.man
 
     - match: $
       pop: true
