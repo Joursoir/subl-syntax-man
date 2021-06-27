@@ -9,28 +9,25 @@ variables:
   # Requests always have a period (‘.’) or an apostrophe (‘'’)
   # as the first character of the input line.
   cc: ^([.']) # cc - control character
+  escape: \\f
   macro: (TH|SH|SS|TP|LP|PP|P|HP|RS|RE)\b
   numeric: '\b(-)?[0-9.]+\b'
   font_size: (SM|SB)\b
   font_alt: (BI|IB|RI|IR|BR|RB)\b
   font_style: ([BRI])
+  end_format: (?={{escape}}|{{cc}})
 
 contexts:
   main:
     - match: (?={{cc}})
       push: macros
 
-    - match: '{{cc}}(?={{font_style}})\b'
-      scope: keyword.control.man
+    - match: (?={{escape}}{{font_style}})
       push: font_styles
       with_prototype:
-        - match: $
+        - match: '{{end_format}}'
+          meta_content_scope: markup.regular.man
           pop: true
-
-    - match: (\\f){{font_style}}
-      captures:
-        1: keyword.control.man
-        2: constant.character.escape.man
 
     # Comments begin and finish at the end of the line
     - match: \\["#]
@@ -45,6 +42,14 @@ contexts:
     - match: '{{cc}}{{macro}}'
       scope: keyword.control.man
       push: macros_line
+      pop: true
+
+    - match: '{{cc}}(?={{font_style}})\b'
+      scope: keyword.control.man
+      push: font_styles
+      with_prototype:
+        - match: '{{end_format}}'
+          pop: true
       pop: true
 
     - match: '{{cc}}\w+\b'
@@ -75,13 +80,19 @@ contexts:
 
 
   font_styles:
-    - match: B
-      scope: keyword.control.man
+    - match: (B\b|{{escape}}(B))
+      captures:
+        1: keyword.control.man
+        2: constant.character.escape.man
       push:
         - meta_content_scope: markup.bold.man
-    - match: R
-      scope: keyword.control.man
-    - match: I
-      scope: keyword.control.man
+    - match: ({{escape}})(R) # only \fR
+      captures:
+        1: keyword.control.man
+        2: constant.character.escape.man
+    - match: (I\b|{{escape}}(I))
+      captures:
+        1: keyword.control.man
+        2: constant.character.escape.man
       push:
         - meta_content_scope: markup.italic.man
