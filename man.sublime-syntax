@@ -56,7 +56,13 @@ contexts:
   macros_line:
     - match: '"'
       scope: punctuation.definition.string.begin.man
-      push: string
+      push:
+        - meta_scope: string.quoted.double.man
+        - match: '"'
+          scope: punctuation.definition.string.end.man
+          pop: true
+        - match: '[^\\]\n'
+          pop: true
 
     - match: '{{numeric}}'
       scope: constant.numeric.man
@@ -79,10 +85,3 @@ contexts:
       scope: keyword.control.man
       push:
         - meta_content_scope: markup.italic.man
-
-
-  string:
-    - meta_scope: string.quoted.double.man
-    - match: '"'
-      scope: punctuation.definition.string.end.man
-      pop: true
