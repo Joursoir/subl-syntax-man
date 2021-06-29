@@ -15,7 +15,6 @@ variables:
   font_size: (SM|SB)\b
   font_alt: (BI|IB|RI|IR|BR|RB)\b
   font_style: ([BRI])
-  end_format: (?={{escape}}|{{cc}})
 
 contexts:
   main:
@@ -25,7 +24,7 @@ contexts:
     - match: (?={{escape}}{{font_style}})
       push: font_styles
       with_prototype:
-        - match: '{{end_format}}'
+        - match: '(?={{escape}}|{{cc}})'
           meta_content_scope: markup.regular.man
           pop: true
 
@@ -48,7 +47,7 @@ contexts:
       scope: keyword.control.man
       push: font_styles
       with_prototype:
-        - match: '{{end_format}}'
+        - match: '(?={{escape}}|$)'
           pop: true
       pop: true
 
