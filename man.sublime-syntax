@@ -10,7 +10,7 @@ variables:
   # as the first character of the input line.
   cc: ^([.']) # cc - control character
   escape: \\f
-  macro: (TH|SH|SS|TP|LP|PP|P|HP|RS|RE)\b
+  macro: (TH|SH|SS|TP|LP|PP|P|IP|HP|RS|RE)\b
   numeric: '\b(-)?[0-9.]+\b'
   font_size: (SM|SB)\b
   font_alt: (BI|IB|RI|IR|BR|RB)\b
