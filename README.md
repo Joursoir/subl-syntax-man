@@ -11,3 +11,10 @@ For example here is the path to sublime text folder in my Linux: `~/.config/subl
 # Screenshot:
 
 ![](syntax-screenshot.png)
+![](syntax-screenshot2.png)
+
+# Useful links:
+
+* [groff](https://www.gnu.org/software/groff/manual/groff.html)
+* [Oniguruma Regular Expressions Version 5.9.1](https://raw.githubusercontent.com/kkos/oniguruma/5.9.6/doc/RE)
+* [Sublime text syntax](http://www.sublimetext.com/docs/syntax.html)
