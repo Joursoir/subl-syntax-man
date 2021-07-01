@@ -43,6 +43,14 @@ contexts:
       push: macros_line
       pop: true
 
+    - match: '{{cc}}(?={{font_alt}})\b'
+      scope: keyword.control.man
+      push: font_alts
+      with_prototype:
+        - match: '(?={{escape}}|$)'
+          pop: true
+      pop: true
+
     - match: '{{cc}}(?={{font_style}})\b'
       scope: keyword.control.man
       push: font_styles
@@ -75,6 +83,113 @@ contexts:
       scope: variable.parameter.man
 
     - match: $
+      pop: true
+
+
+  font_alts:
+    - match: \bB
+      scope: keyword.control.man
+      push: font_alt_bold
+    - match: \bR
+      scope: keyword.control.man
+      push: font_alt_regular
+    - match: \bI
+      scope: keyword.control.man
+      push: font_alt_italic
+
+
+  font_alt_bold:
+    - match: I\s+
+      scope: keyword.control.man
+      push:
+        - meta_content_scope: markup.bold.man
+        - include: start_and_end_string
+
+        - match: '\s+'
+          push:
+            - meta_content_scope: markup.italic.man
+            - clear_scopes: 1
+            - include: font_alt_odd_pop
+
+    - match: R\s+
+      scope: keyword.control.man
+      push:
+        - meta_content_scope: markup.bold.man
+        - include: start_and_end_string
+
+        - match: '\s+'
+          push:
+            - meta_content_scope: markup.regular.man
+            - clear_scopes: 1
+            - include: font_alt_odd_pop
+
+
+  font_alt_regular:
+    - match: B\s+
+      scope: keyword.control.man
+      push:
+        - meta_content_scope: markup.regular.man
+        - include: start_and_end_string
+
+        - match: '\s+'
+          push:
+            - meta_content_scope: markup.bold.man
+            - clear_scopes: 1
+            - include: font_alt_odd_pop
+
+    - match: I\s+
+      scope: keyword.control.man
+      push:
+        - meta_content_scope: markup.regular.man
+        - include: start_and_end_string
+
+        - match: '\s+'
+          push:
+            - meta_content_scope: markup.italic.man
+            - clear_scopes: 1
+            - include: font_alt_odd_pop
+
+
+  font_alt_italic:
+    - match: B\s+
+      scope: keyword.control.man
+      push:
+        - meta_content_scope: markup.italic.man
+        - include: start_and_end_string
+
+        - match: '\s+'
+          push:
+            - meta_content_scope: markup.bold.man
+            - clear_scopes: 1
+            - include: font_alt_odd_pop
+
+    - match: R\s+
+      scope: keyword.control.man
+      push:
+        - meta_content_scope: markup.italic.man
+        - include: start_and_end_string
+
+        - match: '\s+'
+          push:
+            - meta_content_scope: markup.regular.man
+            - clear_scopes: 1
+            - include: font_alt_odd_pop
+
+
+  start_and_end_string: 
+    - match: '(?<=\s)"'
+      push:
+        - match: '"[^\s]'
+          scope: invalid.illegal
+          pop: true
+        - match: '"'
+          pop: true
+
+
+  font_alt_odd_pop:
+    - include: start_and_end_string
+
+    - match: '\s+'
       pop: true
 
 
